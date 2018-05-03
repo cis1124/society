@@ -6,7 +6,7 @@ import uuid
 #result Consensus everyday
 #credits 100
 #add member
-#write data
+#writete data
 #search data
 
 class Chain(object):
@@ -17,9 +17,6 @@ class Chain(object):
         self.member=["first_domain.sc.com","second_domain.sc.com"]
         self.meta_block=Block("new","new")
         self.chain_id=generate_id()
-
-    def add_block(self,block):
-        pass
 
     def add_member():
         pass
@@ -40,10 +37,24 @@ class Block(object):
         self.message=message
         self.chain=chain
         self.is_written=False
+        self.is_sended=False
+        self.is_cached=False
+
+    def send(self):
+        chain=self.chain
+
+    def send_confirm():
+        self.is_sended=True
 
     def dump():
         pass
- 
+
+    def write(self):
+        location=self.chain.get_chain_location()
+
+
+
+
 class Message(object):
 
     def __init__(self,type,content):
@@ -73,7 +84,7 @@ class Cache(object):
 
 def generate_id():
     return "bAW02W6R0Ce02Zze4WtfR9jbZO"
-  
+
 def get_hardware_info():
     mac=uuid.UUID(int = uuid.getnode()).hex[-12:]
     print mac
@@ -104,4 +115,3 @@ if __name__=="__main__":
     message=Message("text","for test")
     print chain.get_chain_location()
     #write_disk("objects/"+chain.chain_id,chain.chain_id)
-    
