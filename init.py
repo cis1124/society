@@ -3,11 +3,11 @@
 
 import uuid
 
-#result Consensus everyday
+#git version 2.7
+#result consensus everyday
 #credits 100
-#add member
-#writete data
-#search data
+
+
 
 class Chain(object):
 
@@ -67,6 +67,7 @@ class Node(object):
     def __init__(self):
         self.dns=["a","b","c","d"]
         self.domain="bb.com"
+
 
 class Cache(object):
 
