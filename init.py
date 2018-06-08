@@ -30,20 +30,38 @@ class Chain(object):
         block.is_written=True
         return True
 
+    def get_last_block():
+        pass
+
+    def get_ref_block():
+        pass
+
+    def read(self,key):
+        pass
+
 
 class Block(object):
 
-    def __init__(self,chain,message):
+    def __init__(self,chain,member,message):
         self.message=message
         self.chain=chain
+        self.is_first=is_first
         self.is_written=False
         self.is_sended=False
         self.is_cached=False
+        self.is_private=True
+        self.is_public=True
+        self.ref_block=""
+        self.last_block=""
+        self.auth=""
+        self.member=chain["member"]
 
     def send(self):
         chain=self.chain
+        for m in self.member:
+            pass
 
-    def send_confirm():
+    def send_confirm(self):
         self.is_sended=True
 
     def dump():
@@ -53,7 +71,8 @@ class Block(object):
         location=self.chain.get_chain_location()
 
 
-
+class Router(object):
+    pass
 
 class Message(object):
 
@@ -77,18 +96,17 @@ class Cache(object):
 
     def pop_block(self):
         pass
-#########################
+
+
 ##define common function
 ##
-##
-#########################
 
 def generate_id():
     return "bAW02W6R0Ce02Zze4WtfR9jbZO"
 
 def get_hardware_info():
     mac=uuid.UUID(int = uuid.getnode()).hex[-12:]
-    print mac
+    print(mac)
     return ":".join([mac[e:e+2] for e in range(0,11,2)])
 
 def init_myself(user):
@@ -114,5 +132,5 @@ if __name__=="__main__":
 
     chain=Chain("first_chain","chain","")
     message=Message("text","for test")
-    print chain.get_chain_location()
+    print(chain.get_chain_location())
     #write_disk("objects/"+chain.chain_id,chain.chain_id)
