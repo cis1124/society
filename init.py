@@ -4,7 +4,6 @@
 import uuid
 
 #git version 2.7
-#result consensus everyday
 #credits 100
 
 
@@ -71,9 +70,6 @@ class Block(object):
         location=self.chain.get_chain_location()
 
 
-class Router(object):
-    pass
-
 class Message(object):
 
     def __init__(self,type,content):
@@ -97,9 +93,12 @@ class Cache(object):
     def pop_block(self):
         pass
 
+def sync():
+    pass
 
-##define common function
-##
+#根据在线时长获取credit,一个月1分:proof of work
+def pow():
+    pass
 
 def generate_id():
     return "bAW02W6R0Ce02Zze4WtfR9jbZO"
