@@ -2,96 +2,74 @@
 #!/usr/bin/python
 
 import uuid
-
-#git version 2.7
+import pickle
+import json
 #credits 100
-
-
 
 class Chain(object):
 
-    def __init__(self,name,member,*args,**kw):
+    def __init__(self,name,member):
         self.name=name
         self.domain="first_chain.sc.com"
-        self.member=["first_domain.sc.com","second_domain.sc.com"]
+        self.member=["key-0001","key-0002"]
         self.meta_block=Block("new","new")
-        self.chain_id=generate_id()
+        self.id=generate_id()
 
     def add_member():
         pass
 
     def get_chain_location(self):
-        return "objects/"+self.chain_id
+        return "objects/"+self.id
 
     def write(self,block):
-        with open(self.get_chain_location(),"w") as f:
-            f.write(block.message)
-        block.is_written=True
+        with open(self.get_chain_location(),"wb") as f:
+            f.write(block)
+        #block.is_written=True
         return True
 
-    def get_last_block():
-        pass
+    def read(self,block):
+        return block
 
-    def get_ref_block():
-        pass
+    def get_block(filter):
+        return block
 
-    def read(self,key):
-        pass
+    def count(self):
+        return self.count
 
+    def new_block(self,messaga):
+        b=Block(self,message)
+        return b
 
 class Block(object):
 
-    def __init__(self,chain,member,message):
+    def __init__(self,chain,message):
+        self.is_meta=False
         self.message=message
         self.chain=chain
-        self.is_first=is_first
+        self.owner=owner
+        self.time=time
+        self.timezone=timezone
         self.is_written=False
         self.is_sended=False
         self.is_cached=False
-        self.is_private=True
-        self.is_public=True
-        self.ref_block=""
-        self.last_block=""
+        self.id=id
+        self.refer_block=""
+        self.upper_block=""
+        #self.last_block=""
         self.auth=""
-        self.member=chain["member"]
 
     def send(self):
-        chain=self.chain
-        for m in self.member:
-            pass
-
-    def send_confirm(self):
-        self.is_sended=True
-
-    def dump():
         pass
 
-    def write(self):
-        location=self.chain.get_chain_location()
-
+    def dump(self):
+        s=pickle.dumps(self)
+        return s
 
 class Message(object):
 
     def __init__(self,type,content):
         self.type=type
         self.content=content
-
-
-class Node(object):
-
-    def __init__(self):
-        self.dns=["a","b","c","d"]
-        self.domain="bb.com"
-
-
-class Cache(object):
-
-    def __init__(self):
-        self.dns_dict=""
-        self.block_queue=""
-
-    def pop_block(self):
-        pass
 
 def sync():
     pass
@@ -129,7 +107,9 @@ def send(message,dest):
 
 if __name__=="__main__":
 
-    chain=Chain("first_chain","chain","")
+    chain=Chain("first_chain","chain")
     message=Message("text","for test")
-    print(chain.get_chain_location())
+    b=chain.new_block(message)
+    chain.write(b.dump())
+#    print(chain.get_chain_location())
     #write_disk("objects/"+chain.chain_id,chain.chain_id)
