@@ -4,6 +4,7 @@
 import uuid
 import pickle
 import json
+
 #credits 100
 
 class Chain(object):
@@ -12,7 +13,7 @@ class Chain(object):
         self.name=name
         self.domain="first_chain.sc.com"
         self.member=["key-0001","key-0002"]
-        self.meta_block=Block("new","new")
+        self.meta_block=Block("new","new","","","")
         self.id=generate_id()
 
     def add_member():
@@ -37,12 +38,12 @@ class Chain(object):
         return self.count
 
     def new_block(self,messaga):
-        b=Block(self,message)
+        b=Block(self,message,"","","")
         return b
 
 class Block(object):
 
-    def __init__(self,chain,message):
+    def __init__(self,chain,message,owner,time,timezone):
         self.is_meta=False
         self.message=message
         self.chain=chain
