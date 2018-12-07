@@ -2,6 +2,7 @@
 #!/usr/bin/python
 
 import chain
+import werkzeug
 
 seed=[]
 config=[]
@@ -14,10 +15,11 @@ class node():
     def load(self,chain_id):
         return chain
 
+    def sync(self):
+        pass
+
+
 if __name__=="__main__":
     Node=node()
     chain=Node.load("")
     b=chain.new_block()
-
-
-
