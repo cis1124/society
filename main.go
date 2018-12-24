@@ -23,6 +23,8 @@ import (
         "github.com/tendermint/tendermint/abci/types"
         "github.com/tendermint/tendermint/abci/version"
         "github.com/tendermint/tendermint/crypto/merkle"
+
+        society "./src/society_abci"
 )
 
 // client is a global variable so it can be reused by the console
@@ -58,7 +60,7 @@ var RootCmd = &cobra.Command{
         PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
 
                 switch cmd.Use {
-                case "counter", "kvstore", "dummy": // for the examples apps, don't pre-run
+                case "counter", "kvstore", "dummy","society": // for the examples apps, don't pre-run
                         return nil
                 case "version": // skip running for version command
                         return nil
@@ -135,6 +137,10 @@ func addKVStoreFlags() {
         kvstoreCmd.PersistentFlags().StringVarP(&flagPersist, "persist", "", "", "directory to use for a database")
 }
 
+func addSocietyFlags() {
+        societyCmd.PersistentFlags().StringVarP(&flagPersist, "persist", "", "", "directory to use for a database")
+}
+
 func addCommands() {
         RootCmd.AddCommand(batchCmd)
         RootCmd.AddCommand(consoleCmd)
@@ -158,6 +164,9 @@ func addCommands() {
         // replaces dummy, see issue #196
         addKVStoreFlags()
         RootCmd.AddCommand(kvstoreCmd)
+        // add society
+        addSocietyFlags()
+        RootCmd.AddCommand(societyCmd)
 }
 
 var batchCmd = &cobra.Command{
@@ -310,6 +319,16 @@ var kvstoreCmd = &cobra.Command{
         Args:  cobra.ExactArgs(0),
         RunE: func(cmd *cobra.Command, args []string) error {
                 return cmdKVStore(cmd, args)
+        },
+}
+
+var societyCmd = &cobra.Command{
+        Use:   "society",
+        Short: "my society app",
+        Long:  "just for test",
+        Args:  cobra.ExactArgs(0),
+        RunE: func(cmd *cobra.Command, args []string) error {
+                return cmdSociety(cmd, args)
         },
 }
 
@@ -710,6 +729,37 @@ func cmdKVStore(cmd *cobra.Command, args []string) error {
         return nil
 }
 
+
+func cmdSociety(cmd *cobra.Command, args []string) error {
+        logger := log.NewTMLogger(log.NewSyncWriter(os.Stdout))
+
+        // Create the application - in memory or persisted to disk
+        var app types.Application
+        if flagPersist == "" {
+                app = society.NewKVStoreApplication()
+        } else {
+                app = society.NewPersistentKVStoreApplication(flagPersist)
+                app.(*society.PersistentKVStoreApplication).SetLogger(logger.With("module", "society"))
+        }
+
+        // Start the listener
+        srv, err := server.NewServer(flagAddress, flagAbci, app)
+        if err != nil {
+                return err
+        }
+        srv.SetLogger(logger.With("module", "abci-server"))
+        if err := srv.Start(); err != nil {
+                return err
+        }
+
+        // Wait forever
+        cmn.TrapSignal(func() {
+                // Cleanup
+                srv.Stop()
+        })
+        return nil
+}
+
 //--------------------------------------------------------------------------------
 
 func printResponse(cmd *cobra.Command, args []string, rsp response) {
@@ -771,4 +821,12 @@ func stringOrHexToBytes(s string) ([]byte, error) {
         }
 
         return []byte(s[1 : len(s)-1]), nil
+}
+
+func main() {
+	err := Execute()
+	if err != nil {
+		fmt.Print(err)
+		os.Exit(1)
+	}
 }

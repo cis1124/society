@@ -1,4 +1,4 @@
-package abci_app
+package society
 
 import (
 	"bytes"
